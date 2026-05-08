@@ -3,6 +3,9 @@ const config = require('config');
 const Category = require('./models/Category');
 const Product = require('./models/Product');
 
+const User = require('./models/User');
+const bcrypt = require('bcryptjs');
+
 const MONGO_URI = config.get('mongoURI');
 
 async function seed() {
@@ -12,6 +15,15 @@ async function seed() {
 
     await Category.deleteMany({});
     await Product.deleteMany({});
+    await User.deleteMany({});
+
+    const salt = await bcrypt.genSalt(10);
+    const password = await bcrypt.hash('password123', salt);
+
+    await User.create([
+      { name: 'Admin User', email: 'admin@example.com', password, role: 'admin' },
+      { name: 'Normal User', email: 'user@example.com', password, role: 'user' }
+    ]);
 
     const electronics = await Category.create({ name: 'Electronics', description: 'Gadgets and devices' });
     const clothing = await Category.create({ name: 'Clothing', description: 'Apparel and accessories' });

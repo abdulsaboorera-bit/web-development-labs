@@ -1,0 +1,55 @@
+<div class="container page-header">
+  <h2><%= title %></h2>
+</div>
+
+<div class="container shop-container">
+  <% if (products.length > 0) { %>
+    <div class="product-grid">
+      <% products.forEach(product => { %>
+        <div class="product-card">
+          <a href="/product/<%= product.slug %>">
+            <img src="<%= product.image %>" alt="<%= product.name %>" class="product-image">
+          </a>
+          <div class="product-info">
+            <span class="product-category"><%= product.category ? product.category.name : 'Uncategorized' %></span>
+            <a href="/product/<%= product.slug %>" style="text-decoration: none; color: inherit;">
+              <h3 class="product-title"><%= product.name %></h3>
+            </a>
+            <p class="product-desc"><%= product.description %></p>
+            <div class="product-bottom">
+              <span class="product-price">$<%= product.price.toFixed(2) %></span>
+              <form action="/cart/add/<%= product._id %>" method="POST" style="display: inline;">
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit" class="btn btn-secondary">Add to Cart</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+    
+    <% if (totalPages > 1) { %>
+      <div class="pagination" style="margin-top: 2rem; display: flex; justify-content: center; gap: 0.5rem;">
+        <% let baseUrl = typeof categorySlug !== 'undefined' ? '/shop/category/' + categorySlug : '/shop'; %>
+        
+        <% if (currentPage > 1) { %>
+          <a href="<%= baseUrl %>?page=<%= currentPage - 1 %>" class="btn btn-secondary" style="padding: 0.5rem 1rem;">&laquo; Prev</a>
+        <% } %>
+        
+        <% for (let i = 1; i <= totalPages; i++) { %>
+          <a href="<%= baseUrl %>?page=<%= i %>" class="btn <%= i === currentPage ? 'btn-primary' : 'btn-secondary' %>" style="padding: 0.5rem 1rem;"><%= i %></a>
+        <% } %>
+
+        <% if (currentPage < totalPages) { %>
+          <a href="<%= baseUrl %>?page=<%= currentPage + 1 %>" class="btn btn-secondary" style="padding: 0.5rem 1rem;">Next &raquo;</a>
+        <% } %>
+      </div>
+    <% } %>
+    
+  <% } else { %>
+    <div class="empty-state" style="text-align: center; padding: 3rem;">
+      <h3>No products found</h3>
+      <p>Please check back later or try another category.</p>
+    </div>
+  <% } %>
+</div>
