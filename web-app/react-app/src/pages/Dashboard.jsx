@@ -20,29 +20,32 @@ const StatCard = ({ title, count, icon, color }) => (
 );
 
 export default function Dashboard() {
-  const [stats, setStats] = useState(null);
+  const [stats, setStats] = useState({ products: 0, categories: 0, orders: 0 });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
         // Since we don't have a single "stats" endpoint, we fetch multiple
-        const [prod, cat, ord] = await Promise.all([
+        const [prod, cat, ord] = await Promise.allSettled([
           api.get('/products'),
           api.get('/categories'),
           api.get('/orders')
         ]);
-        setStats({
-          products: prod.data.length,
-          categories: cat.data.length,
-          orders: ord.data.length
-        });
+
+        const products = prod.status === 'fulfilled' ? prod.value.data.length : 0;
+        const categories = cat.status === 'fulfilled' ? cat.value.data.length : 0;
+        const orders = ord.status === 'fulfilled' ? ord.value.data.length : 0;
+
+        setStats({ products, categories, orders });
       } catch (err) {
         console.error(err);
+        setStats({ products: 0, categories: 0, orders: 0 });
       } finally {
         setLoading(false);
       }
     };
+    
     fetchStats();
   }, []);
 
@@ -50,6 +53,7 @@ export default function Dashboard() {
 
   return (
     <Box>
+     
       <Typography variant="h4" sx={{ mb: 4, fontWeight: 700 }}>Dashboard Overview</Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6} md={4}>

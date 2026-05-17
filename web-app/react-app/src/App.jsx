@@ -7,12 +7,10 @@ import ProductList from './pages/ProductList';
 import CategoryList from './pages/CategoryList';
 import OrderList from './pages/OrderList';
 import LoginPage from './pages/LoginPage';
-import { CircularProgress, Box } from '@mui/material';
 
 const ProtectedRoute = ({ children }) => {
-  const { user, loading } = useContext(AuthContext);
-  
-  if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}><CircularProgress /></Box>;
+  const { user } = useContext(AuthContext);
+
   if (!user) return <Navigate to="/login" />;
   
   return <Layout>{children}</Layout>;
