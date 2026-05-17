@@ -3,6 +3,7 @@ import { Box, Drawer, AppBar, Toolbar, List, Typography, Divider, ListItem, List
 import { Dashboard, ShoppingBag, Category, ShoppingCart, Logout } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import GeminiChatWidget from './GeminiChatWidget';
 
 const drawerWidth = 240;
 
@@ -59,6 +60,7 @@ export default function Layout({ children }) {
         <Toolbar />
         {children}
       </Box>
+      <GeminiChatWidget />
     </Box>
   );
 }

@@ -1,4 +1,39 @@
-<div class="container page-header">
+<div class="shop-hero">
+
+
+
+
+  <div class="shop-hero-content">
+  <img src="/images/header.png" alt="Shop Hero Image" class="shop-hero-image">
+    
+  </div>
+
+
+</div>
+
+<section class="new-launch">
+  <div class="container">
+    <h3 class="new-launch-title">New Launch</h3>
+    <div class="new-launch-grid">
+      <% products.slice(0, 2).forEach(product => { %>
+        <div class="new-launch-card">
+          <a href="/product/<%= product.slug %>" class="new-launch-image-wrap">
+            <img src="<%= product.image %>" alt="<%= product.name %>" class="new-launch-image">
+          </a>
+          <div class="new-launch-info">
+            <span class="new-launch-price">Rs:<%= product.price.toFixed(2) %></span>
+            <form action="/cart/add/<%= product._id %>" method="POST">
+              <input type="hidden" name="quantity" value="1">
+              <button type="submit" class="btn btn-secondary">Add To Cart</button>
+            </form>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<div class="container page-header" id="shop-products">
   <h2><%= title %></h2>
 </div>
 

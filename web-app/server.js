@@ -1,4 +1,7 @@
+
+
 const express = require('express');
+require('dotenv').config();
 const mongoose = require('mongoose');
 const expressLayouts = require('express-ejs-layouts');
 const config = require('config');
@@ -32,8 +35,193 @@ const cors = require('cors');
 
 const app = express();
 
-// Middlewares
+// Core middlewares for APIs
 app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+
+
+
+
+
+
+const websiteData = `
+========================
+DARI MOOCH ECOMMERCE STORE
+========================
+
+ABOUT:
+Dari Mooch is a grooming and skincare brand for men in Pakistan.
+
+FREE SHIPPING:
+- Orders above 1999 PKR
+
+========================
+NAVIGATION / PAGES
+========================
+
+Categories:
+- Ramadan Bundle
+- Beard
+- Face
+- Hair
+- De-Tan Line
+- Build Your Own Bundle
+- Royalty Rewards
+- Best Sellers
+- Deals
+- Gifts
+- All Products
+- Blog
+- Order Tracker
+
+========================
+BEST SELLING PRODUCTS
+========================
+
+Glow Facewash - 1999
+Glow Body Wash - 2999
+Glow Bundle - 3999
+Sunge Perfume - 4999
+
+========================
+FACE PRODUCTS
+========================
+
+De-Tan Sunscreen - 1999
+Lib Lightener Balm - 2999
+Under Eye Balm - 4999
+
+========================
+HAIR PRODUCTS
+========================
+
+Hair Hold Cream - 1099
+Anti-Hairfall Shampoo - 1099
+Anti-Hairfall Bundle (Complete Hair Loss Solution) - 1978
+Ultimate Skin and Hair Care Bundle - 2499
+
+========================
+BEARD PRODUCTS
+========================
+
+Beard Growth Kit - 3799
+
+========================
+BODY PRODUCTS
+========================
+
+De Tan Body Wash - 2999
+Charcoal Body Wash - 699
+
+========================
+GENERAL PRODUCTS
+========================
+
+Lib-Balm - 3999
+Under Eye Balm - 4999
+
+========================
+SHOP INFO
+========================
+
+Currency: PKR / $
+Add to Cart feature available
+Cart system enabled
+Admin Panel available
+User Login / Logout system
+
+========================
+NEWSLETTER
+========================
+
+Email subscription available for:
+- Discounts
+- Latest news
+- Offers
+
+========================
+CONTACT
+========================
+
+Email: support@darimooch.com
+Phone: +92 316 1115556
+
+Store Locations:
+- Shapes Executive Gym Gulberg-III, Lahore
+- Lake City Mall, Lahore
+- Packages Mall, Lahore
+- Giga Mall Islamabad kiosk
+- DHA Phase 4 Lahore Barber Shop
+
+========================
+BRAND DESCRIPTION
+========================
+
+Dari Mooch is a one stop solution for grooming needs.
+We aim to style and groom every man in Pakistan.
+
+========================
+RULES FOR AI
+========================
+
+- Only answer from this data
+- If not found say: "Not available on website"
+- Suggest related products when possible
+`;
+
+
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+
+const model = genAI.getGenerativeModel({
+  model: "gemini-2.5-flash",
+});
+
+
+app.post("/api/chat", async (req, res) => {
+  try {
+    const { message } = req.body;
+
+    const prompt = `
+You are an AI assistant for an ecommerce website.
+
+RULES:
+- Only use website data below
+- If not found, say "Not available on website"
+- Suggest related products if possible
+
+WEBSITE DATA:
+${websiteData}
+
+USER QUESTION:
+${message}
+`;
+
+    const result = await model.generateContent(prompt);
+    const response = result.response.text();
+
+    res.json({ reply: response });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "AI error" });
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
 
 // Configuration
 const PORT = config.has('port') ? config.get('port') : 3000;
@@ -51,8 +239,6 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('layout', 'layout'); // default layout is views/layout.ejs
 
 // Built-in Middlewares
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
 

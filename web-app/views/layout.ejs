@@ -6,61 +6,55 @@
   <title><%= typeof title !== 'undefined' ? title : 'MERN E-Commerce' %></title>
   <link rel="stylesheet" href="/css/style.css">
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <nav class="navbar">
-    <div class="container nav-container" style="display: flex; justify-content: space-between; align-items: center;">
-      <a href="/" class="logo">ShopDemo</a>
-      <ul class="nav-links" style="display: flex; align-items: center; gap: 1rem; list-style: none; margin: 0; padding: 0;">
-        <li><a href="/">Home</a></li>
-        <li><a href="/shop">Shop</a></li>
-        <li style="position: relative;" class="dropdown">
-          <a href="#" style="cursor: pointer;">Categories &#x25BC;</a>
-          <ul class="dropdown-menu" style="display: none; position: absolute; background: white; border: 1px solid #ccc; list-style: none; padding: 0.5rem; margin-top: 0.5rem; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 1000; min-width: 150px;">
-            <% if (categories && categories.length > 0) { %>
-              <% categories.forEach(cat => { %>
-                <li style="padding: 0.25rem 0;"><a href="/shop/category/<%= cat.slug %>" style="color: #333; display: block;"><%= cat.name %></a></li>
-              <% }) %>
-            <% } else { %>
-              <li style="padding: 0.25rem 0; color: #777;">No categories</li>
+  <div class="top-bar">Get Free Shipping on orders above 1999/-</div>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="header-top">
+        <div class="header-spacer" aria-hidden="true"></div>
+        <a href="/" class="logo-link" aria-label="Daari Mooch">
+          <img src="/images/logo.png" alt="Daari Mooch" class="logo-img">
+        </a>
+        <div class="header-actions" aria-label="Account and cart">
+          <a href="/cart">Cart (<%= typeof cartCount !== 'undefined' ? cartCount : 0 %>)</a>
+          <% if (user) { %>
+            <% if (user.role === 'admin') { %>
+              <a href="/admin">Admin Panel</a>
             <% } %>
-          </ul>
-        </li>
-      </ul>
-      <ul class="nav-links right-links" style="display: flex; align-items: center; gap: 1rem; list-style: none; margin: 0; padding: 0;">
-        <li><a href="/cart">Cart (<%= typeof cartCount !== 'undefined' ? cartCount : 0 %>)</a></li>
-        <% if (user) { %>
-          <% if (user.role === 'admin') { %>
-            <li><a href="/admin">Admin Panel</a></li>
+            <a href="/auth/logout">Logout (<%= user.name %>)</a>
+          <% } else { %>
+            <a href="/auth/login">Login</a>
+            <a href="/auth/register">Register</a>
           <% } %>
-          <li><a href="/auth/logout">Logout (<%= user.name %>)</a></li>
-        <% } else { %>
-          <li><a href="/auth/login">Login</a></li>
-          <li><a href="/auth/register">Register</a></li>
-        <% } %>
-      </ul>
+        </div>
+      </div>
+      <nav class="main-nav" aria-label="Primary">
+        <ul class="nav-row">
+          <li><a href="/shop">Categories</a></li>
+          <li><a href="#">Ramadan Bundle</a></li>
+          <li><a href="#">Beard</a></li>
+          <li><a href="#">Face</a></li>
+          <li><a href="#">Hair</a></li>
+          <li><a href="#">De-Tan Line</a></li>
+          <li><a href="#">build your Own Bundle</a></li>
+          <li><a href="#">Royalty Rewards</a></li>
+          <li><a href="#">Dari Mooch Barber Shop</a></li>
+          <li><a href="#">Best Sellers</a></li>
+          <li><a href="#">Deals</a></li>
+        </ul>
+        <ul class="nav-row">
+          <li><a href="#">Best Sellers</a></li>
+          <li><a href="#">Deals</a></li>
+          <li><a href="#">Gifts</a></li>
+          <li><a href="/shop">All Products</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Order Tracker</a></li>
+        </ul>
+      </nav>
     </div>
-  </nav>
-
-  <script>
-    // Simple dropdown toggle script
-    document.querySelectorAll('.dropdown > a').forEach(el => {
-      el.addEventListener('click', function(e) {
-        e.preventDefault();
-        const menu = this.nextElementSibling;
-        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-      });
-    });
-    // Close dropdown if clicked outside
-    window.addEventListener('click', function(e) {
-      if (!e.target.matches('.dropdown > a')) {
-        document.querySelectorAll('.dropdown-menu').forEach(menu => {
-          menu.style.display = 'none';
-        });
-      }
-    });
-  </script>
+  </header>
 
   <div class="container" style="margin-top: 1rem;">
     <% if (success_msg && success_msg.length > 0) { %>
@@ -83,10 +77,106 @@
     <%- body %>
   </main>
 
-  <footer class="footer">
-    <div class="container">
-      <p>&copy; 2026 MERN E-Commerce. All rights reserved.</p>
+  <div id="newsletter">
+    <h1>Newsletter</h1>
+    <p>
+      Let your customers know what to expect if they sign up to your mailing
+    </p>
+    <p>A discount code or the latest news from your brand.</p>
+    <div>
+      <input type="text" placeholder="Email@example" id="news-input" />
+      <button>Subscribe</button>
+    </div>
+  </div>
+
+  <div id="shop-chatbot" class="shop-chatbot">
+    <button type="button" class="shop-chatbot-toggle" id="shop-chatbot-toggle" aria-expanded="false" aria-controls="shop-chatbot-panel">
+      AI
+    </button>
+    <div class="shop-chatbot-panel" id="shop-chatbot-panel">
+      <div class="shop-chatbot-header">AI Assistant</div>
+      <div class="shop-chatbot-messages" id="shop-chatbot-messages">
+        <div class="shop-chatbot-message bot">Hi! Ask me about products or categories.</div>
+      </div>
+      <form class="shop-chatbot-input" id="shop-chatbot-form">
+        <input type="text" id="shop-chatbot-text" placeholder="Ask something..." aria-label="Ask the AI assistant" />
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <h4>Categories</h4>
+        <ul>
+          <li><a href="/shop">Categories</a></li>
+          <li><a href="#">Ramdan Bundles</a></li>
+          <li><a href="#">Hair</a></li>
+          <li><a href="#">Face</a></li>
+          <li><a href="#">Beard</a></li>
+          <li><a href="#">De-Tan Line</a></li>
+          <li><a href="#">Build Your Own Bundle</a></li>
+          <li><a href="#">Loyalty Rewards</a></li>
+          <li><a href="#">Dari Mooch Barber Shop</a></li>
+          <li><a href="#">Best Sellers</a></li>
+          <li><a href="#">Deals</a></li>
+          <li><a href="#">Gifts</a></li>
+          <li><a href="/shop">All Products</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Order Tracker</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#">Track Your Order</a></li>
+          <li><a href="#">Search</a></li>
+          <li><a href="#">About us</a></li>
+          <li><a href="#">Be Our Distributor</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Refund Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Other Stores</a></li>
+        </ul>
+      </div>
+      <div class="footer-col footer-bio">
+        <h4>Mini Bio</h4>
+        <p>
+          Dari Mooch is a one stop solution for all your grooming needs. We’re the best at what we do and we leave no man behind. We're on a mission to style and groom every Pakistani man to their best self!
+        </p>
+        <h4>Store Locations:</h4>
+        <ul>
+          <li>Shapes Executive Gym Gulberg-III, Lahore</li>
+          <li>Lake City Mall 1st floor, Lahore</li>
+          <li>Packages Mall 2nd Floor Opposite Outfitters, Lahore</li>
+          <li>Ground Floor Dari Mooch Kiosk Opposite Cougar Giga Mall Islamabad</li>
+          <li>Barber Shop: Plaza # 30C, DHA Phase 4 Sector CCA DHA, Lahore</li>
+        </ul>
+      </div>
+      <div class="footer-col footer-contact">
+        <h4>Contact</h4>
+        <p><a href="mailto:support@darimooch.com">support@darimooch.com</a></p>
+        <p class="footer-phone"><a href="tel:+923161115556">+92 316 1115556</a></p>
+        <div class="footer-socials">
+          <a href="#" aria-label="Facebook">Facebook</a>
+          <a href="#" aria-label="Instagram">Instagram</a>
+          <a href="#" aria-label="TikTok">TikTok</a>
+          <a href="#" aria-label="YouTube">YouTube</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <span>Powered By Shopify</span>
+        <span>© 2024 Dari Mooch.</span>
+      </div>
     </div>
   </footer>
+
+  <script src="/js/chatbot.js"></script>
 </body>
 </html>

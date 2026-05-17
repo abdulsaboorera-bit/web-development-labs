@@ -4,6 +4,7 @@ const Category = require('../../models/Category');
 
 // List Categories with Pagination and Sorting
 router.get('/', async (req, res) => {
+  
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = 10;

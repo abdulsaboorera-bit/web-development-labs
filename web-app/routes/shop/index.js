@@ -15,6 +15,10 @@ router.get('/shop', async (req, res) => {
 
     const products = await Product.find().populate('category').skip(skip).limit(limit);
 
+
+
+
+
     res.render('shop/index', { 
       title: 'Our Shop',
       products,

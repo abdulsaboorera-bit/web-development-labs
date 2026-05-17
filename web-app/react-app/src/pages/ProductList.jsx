@@ -154,6 +154,8 @@ export default function ProductList() {
                 </MenuItem>
               ))}
             </TextField>
+
+
           </Box>
           <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
             <Button variant="outlined" component="label" startIcon={<PhotoCamera />} disabled={saveLoading}>
@@ -162,6 +164,9 @@ export default function ProductList() {
             </Button>
             {imageFile && <Typography variant="caption">{imageFile.name}</Typography>}
           </Box>
+
+
+          
         </DialogContent>
         <DialogActions sx={{ p: 2 }}>
           <Button onClick={() => setOpen(false)} disabled={saveLoading}>Cancel</Button>

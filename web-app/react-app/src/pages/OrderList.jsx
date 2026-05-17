@@ -1,26 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, 
-  TableHead, TableRow, IconButton, CircularProgress, Chip, Select, MenuItem,
-  Dialog, DialogTitle, DialogContent, DialogActions, Button, Divider, Grid
+  TableHead, TableRow, IconButton, CircularProgress, Select, MenuItem,
+  Dialog, DialogTitle, DialogContent, DialogActions, Button, Divider, Grid, Alert
 } from '@mui/material';
 import { Visibility, ShoppingCart } from '@mui/icons-material';
 import api from '../services/api';
 import { useSnackbar } from 'notistack';
 
 export default function OrderList() {
+
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [open, setOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   const fetchOrders = async () => {
     try {
+      setError('');
       const res = await api.get('/orders');
       setOrders(res.data);
     } catch (err) {
       console.error(err);
+      if (err.response?.status === 401 || err.response?.status === 403) {
+        setError('You are not authorized to view orders. Please sign in with an admin account.');
+      } else {
+        setError('Unable to load orders right now.');
+      }
     } finally {
       setLoading(false);
     }
@@ -30,6 +38,8 @@ export default function OrderList() {
     fetchOrders();
   }, []);
 
+
+  
   const handleStatusChange = async (id, newStatus) => {
     try {
       const res = await api.put(`/orders/${id}/status`, { status: newStatus });
@@ -48,6 +58,7 @@ export default function OrderList() {
   return (
     <Box>
       <Typography variant="h4" sx={{ mb: 3, fontWeight: 700 }}>Orders</Typography>
+      {error && <Alert severity="warning" sx={{ mb: 2 }}>{error}</Alert>}
       <TableContainer component={Paper} elevation={0} sx={{ border: '1px solid #e0e0e0', borderRadius: 2 }}>
         <Table>
           <TableHead sx={{ backgroundColor: '#f8fafc' }}>
@@ -61,7 +72,13 @@ export default function OrderList() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {orders.map((order) => (
+            {orders.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={6} sx={{ textAlign: 'center', py: 4, color: 'text.secondary' }}>
+                  No orders found.
+                </TableCell>
+              </TableRow>
+            ) : orders.map((order) => (
               <TableRow key={order._id} hover>
                 <TableCell><code>#{order._id.substring(0, 8)}...</code></TableCell>
                 <TableCell>{order.user?.name}</TableCell>
