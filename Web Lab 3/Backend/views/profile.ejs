@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Profile</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        margin: 0;
+        padding: 24px;
+      }
+      .container {
+        max-width: 520px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+      }
+      .nav {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 16px;
+      }
+      .nav a {
+        text-decoration: none;
+        color: #2f3b3b;
+        font-size: 14px;
+      }
+      .flash {
+        padding: 10px 12px;
+        border-radius: 6px;
+        margin-bottom: 12px;
+        font-size: 13px;
+      }
+      .flash-success {
+        background: #e6f4f1;
+        color: #1f5d57;
+      }
+      .flash-error {
+        background: #ffe7e7;
+        color: #a02a2a;
+      }
+      .meta {
+        font-size: 14px;
+        color: #2f3b3b;
+        margin-bottom: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="nav">
+        <a href="/products">Products</a>
+        <a href="/checkout">Checkout</a>
+      </div>
+      <% if (success && success.length) { %>
+        <div class="flash flash-success"><%= success[0] %></div>
+      <% } %>
+      <% if (error && error.length) { %>
+        <div class="flash flash-error"><%= error[0] %></div>
+      <% } %>
+      <h1>My Profile</h1>
+      <div class="meta">Name: <%= currentUser.name %></div>
+      <div class="meta">Email: <%= currentUser.email %></div>
+      <div class="meta">Role: <%= currentUser.role %></div>
+    </div>
+  </body>
+</html>
