@@ -1,0 +1,128 @@
+<div class="shop-hero">
+  <div class="shop-hero-content">
+    <img src="/images/header.png" alt="Shop Hero Image" class="shop-hero-image">
+  </div>
+</div>
+
+<div class="container page-header" id="shop-products">
+  <h2><%= title %></h2>
+</div>
+
+<div class="container shop-container">
+  <% if (products.length > 0) { %>
+    <div class="product-grid" id="product-list">
+      <% products.forEach(product => { %>
+        <div class="product-card">
+          <a href="/product/<%= product.slug %>">
+            <img src="<%= product.image %>" alt="<%= product.name %>" class="product-image">
+          </a>
+          <div class="product-info">
+            <span class="product-category"><%= product.category ? product.category.name : 'Uncategorized' %></span>
+            <a href="/product/<%= product.slug %>" style="text-decoration: none; color: inherit;">
+              <h3 class="product-title"><%= product.name %></h3>
+            </a>
+            <p class="product-desc"><%= product.description %></p>
+            <div class="product-bottom">
+              <span class="product-price">$<%= product.price.toFixed(2) %></span>
+              <form action="/cart/add/<%= product._id %>" method="POST" style="display: inline;">
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit" class="btn btn-secondary">Add to Cart</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="pagination-controls" style="margin-top: 2rem; display: flex; justify-content: center; align-items: center; gap: 1rem;">
+      <button id="prev-btn" class="btn btn-secondary" style="padding: 0.5rem 1rem;">Previous</button>
+      <span id="page-indicator" style="font-weight: bold; min-width: 100px; text-align: center;">Page 1 of <span id="total-pages">1</span></span>
+      <button id="next-btn" class="btn btn-secondary" style="padding: 0.5rem 1rem;">Next</button>
+    </div>
+
+  <% } else { %>
+    <div class="empty-state" style="text-align: center; padding: 3rem;">
+      <h3>No on-sale products found</h3>
+      <p>Check back soon for amazing deals!</p>
+    </div>
+  <% } %>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+  // Configuration
+  const itemsPerPage = 10;
+  let currentPage = 1;
+  const productCards = $('#product-list .product-card');
+  const totalProducts = productCards.length;
+  const totalPages = Math.ceil(totalProducts / itemsPerPage);
+
+  // Initialize
+  function init() {
+    // Set total pages in display
+    $('#total-pages').text(totalPages);
+
+    // Hide all products initially
+    productCards.hide();
+
+    // Show first page
+    showPage(currentPage);
+
+    // Update button states
+    updateButtonStates();
+  }
+
+  // Show products for specific page
+  function showPage(page) {
+    const startIdx = (page - 1) * itemsPerPage;
+    const endIdx = startIdx + itemsPerPage;
+
+    // Hide all products
+    productCards.hide();
+
+    // Show only products for current page
+    productCards.slice(startIdx, endIdx).show();
+
+    // Update page indicator
+    $('#page-indicator').text(`Page ${page} of ${totalPages}`);
+  }
+
+  // Update button disabled states
+  function updateButtonStates() {
+    if (currentPage === 1) {
+      $('#prev-btn').prop('disabled', true).css('opacity', '0.5');
+    } else {
+      $('#prev-btn').prop('disabled', false).css('opacity', '1');
+    }
+
+    if (currentPage === totalPages) {
+      $('#next-btn').prop('disabled', true).css('opacity', '0.5');
+    } else {
+      $('#next-btn').prop('disabled', false).css('opacity', '1');
+    }
+  }
+
+  // Next button click handler
+  $('#next-btn').on('click', function() {
+    if (currentPage < totalPages) {
+      currentPage++;
+      showPage(currentPage);
+      updateButtonStates();
+    }
+  });
+
+  // Previous button click handler
+  $('#prev-btn').on('click', function() {
+    if (currentPage > 1) {
+      currentPage--;
+      showPage(currentPage);
+      updateButtonStates();
+    }
+  });
+
+  // Initialize on page load
+  init();
+});
+</script>

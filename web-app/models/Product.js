@@ -28,6 +28,10 @@ const ProductSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Category',
     required: true
+  },
+  isOnSale: {
+    type: Boolean,
+    default: false
   }
 }, { timestamps: true });
 

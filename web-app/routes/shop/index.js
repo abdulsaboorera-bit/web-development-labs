@@ -63,6 +63,21 @@ router.get('/shop/category/:slug', async (req, res) => {
   }
 });
 
+// On-Sale Products route
+router.get('/onsale-products', async (req, res) => {
+  try {
+    const products = await Product.find({ isOnSale: true }).populate('category');
+    
+    res.render('shop/onsale', { 
+      title: 'On-Sale Products',
+      products
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+  }
+});
+
 // Product details route
 router.get('/product/:slug', async (req, res) => {
   try {

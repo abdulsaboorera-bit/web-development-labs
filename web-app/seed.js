@@ -34,21 +34,96 @@ async function seed() {
         description: 'The latest smartphone with amazing features.',
         price: 999.99,
         category: electronics._id,
-        image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=600&auto=format&fit=crop'
+        image: 'https://picsum.photos/400/300?random=1',
+        isOnSale: true
       },
       {
         name: 'Wireless Headphones',
         description: 'Noise-cancelling over-ear headphones.',
         price: 199.99,
         category: electronics._id,
-        image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=600&auto=format&fit=crop'
+        image: 'https://picsum.photos/400/300?random=2',
+        isOnSale: true
       },
       {
         name: 'Cotton T-Shirt',
         description: 'Comfortable 100% cotton t-shirt.',
         price: 19.99,
         category: clothing._id,
-        image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=600&auto=format&fit=crop'
+        image: 'https://picsum.photos/400/300?random=3',
+        isOnSale: false
+      },
+      {
+        name: 'Laptop Pro',
+        description: 'High-performance laptop for professionals.',
+        price: 1299.99,
+        category: electronics._id,
+        image: 'https://picsum.photos/400/300?random=4',
+        isOnSale: true
+      },
+      {
+        name: 'Denim Jeans',
+        description: 'Classic blue denim jeans.',
+        price: 49.99,
+        category: clothing._id,
+        image: 'https://picsum.photos/400/300?random=5',
+        isOnSale: true
+      },
+      {
+        name: 'USB-C Cable',
+        description: 'Durable USB-C charging cable.',
+        price: 9.99,
+        category: electronics._id,
+        image: 'https://picsum.photos/400/300?random=6',
+        isOnSale: true
+      },
+      {
+        name: 'Running Shoes',
+        description: 'Comfortable running shoes for daily wear.',
+        price: 79.99,
+        category: clothing._id,
+        image: 'https://picsum.photos/400/300?random=7',
+        isOnSale: true
+      },
+      {
+        name: 'Tablet Device',
+        description: 'Portable tablet with stunning display.',
+        price: 499.99,
+        category: electronics._id,
+        image: 'https://picsum.photos/400/300?random=8',
+        isOnSale: true
+      },
+      {
+        name: 'Winter Jacket',
+        description: 'Warm and stylish winter jacket.',
+        price: 89.99,
+        category: clothing._id,
+        image: 'https://picsum.photos/400/300?random=9',
+        isOnSale: false
+      },
+      {
+        name: 'Smart Watch',
+        description: 'Feature-rich smartwatch with fitness tracking.',
+        price: 299.99,
+        category: electronics._id,
+        image: 'https://picsum.photos/400/300?random=10',
+        isOnSale: true
+      },
+      {
+        name: 'Leather Belt',
+        description: 'Premium leather belt with metal buckle.',
+        price: 39.99,
+        category: clothing._id,
+        image: 'https://picsum.photos/400/300?random=11',
+        isOnSale: true
+      },
+      {
+        name: 'Portable Speaker',
+        description: 'Wireless portable Bluetooth speaker.',
+        price: 129.99,
+        category: electronics._id,
+        image: 'https://picsum.photos/400/300?random=12',
+        isOnSale: true
       }
     ]);
 
